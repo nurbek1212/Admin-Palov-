@@ -14,7 +14,7 @@ const Home = () => {
         </Link>
       </div>
       {/* Rasm tag */}
-      <img src="/public/adim-palov.png" alt="Palov" className="hero-image" />
+      <img src="assets/adim-palov.png" alt="Palov" className="hero-image" />
     </section>
   );
 };
