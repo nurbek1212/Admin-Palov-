@@ -4,7 +4,7 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg  fixed-top navbar-gradient">
       <div className="container">
-        <NavLink className="navbar-brand text-white" to="/"><span><img src="assets/admin_lagatif.png" alt="" className="img-logatif" /></span>Admin Palov</NavLink>
+        <NavLink className="navbar-brand text-white" to="/"><span><img src="admin_lagatif.png" alt="" className="img-logatif" /></span>Admin Palov</NavLink>
         <button
           className="navbar-toggler bg-warning"
           type="button"
