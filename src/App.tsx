@@ -7,6 +7,7 @@ import Support from './pages/Support';
 import Basket from './pages/Basket';
 import { BasketProvider } from './context/BasketContext';
 import Profile from './components/Profile';
+import ContactForm from './context/CantactForm';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/order" element={<Order />} />
           <Route path="/support" element={<Support />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/cantactform" element={<ContactForm />} />
         </Routes>
       </Router>
     </BasketProvider>

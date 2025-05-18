@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Support = () => {
@@ -11,15 +11,12 @@ const Support = () => {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     setIsSubmitted(true);
@@ -29,9 +26,15 @@ const Support = () => {
       subject: '',
       message: ''
     });
-    
-    setTimeout(() => setIsSubmitted(false), 3000);
   };
+
+  // isSubmitted o'zgarganda 3 soniya keyin xabarni o'chirish uchun useEffect
+  useEffect(() => {
+    if (isSubmitted) {
+      const timer = setTimeout(() => setIsSubmitted(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSubmitted]);
 
   return (
     <div className="support-page pt-5">
@@ -109,7 +112,7 @@ const Support = () => {
           <div className="contact-info-wrapper">
             <div className="contact-info">
               <h2><i className="bi bi-telephone"></i> Bog'lanish</h2>
-              
+
               <div className="info-card">
                 <div className="info-icon">
                   <i className="bi bi-telephone-fill"></i>

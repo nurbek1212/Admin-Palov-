@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Placeholder } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 const Profile = () => {
   const [userData, setUserData] = useState({
