@@ -178,7 +178,7 @@
   pointer-events: none;
   transform: rotate(-5deg);
   opacity: 0.95;
-  animation: aylanish 5s linear infinite;
+  animation: aylanish 15s linear infinite;
 }
 
 @keyframes aylanish {
@@ -195,7 +195,7 @@
   width: 100%;
   max-width: 800px;
   /* katta ekran uchun maksimal kenglik */
-  transition: 3s ease;
+  transition:  2s ease;
 }
 
 @media (max-width: 368px) {

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+
 const Profile = () => {
   const [userData, setUserData] = useState({
     name: 'Foydalanuvchi Ismi',
@@ -35,6 +36,11 @@ const Profile = () => {
 
   const [activeTab, setActiveTab] = useState('orders');
 
+  // Buyurtmani o'chirish funksiyasi
+  const removeOrder = (id: string) => {
+    setOrders((prev) => prev.filter(order => order.id !== id));
+  };
+
   return (
     <div className="profile-page pt-5">
       <div className="profile-container pt-5">
@@ -55,19 +61,19 @@ const Profile = () => {
             </div>
 
             <nav className="profile-menu">
-              <button 
+              <button
                 className={activeTab === 'orders' ? 'active' : ''}
                 onClick={() => setActiveTab('orders')}
               >
                 <i className="bi bi-cart4"></i> Buyurtmalar tarixi
               </button>
-              <button 
+              <button
                 className={activeTab === 'settings' ? 'active' : ''}
                 onClick={() => setActiveTab('settings')}
               >
                 <i className="bi bi-gear"></i> Sozlamalar
               </button>
-              <button 
+              <button
                 className={activeTab === 'addresses' ? 'active' : ''}
                 onClick={() => setActiveTab('addresses')}
               >
@@ -83,7 +89,7 @@ const Profile = () => {
             {activeTab === 'orders' && (
               <div className="orders-tab">
                 <h2><i className="bi bi-clock-history"></i> Buyurtmalar tarixi</h2>
-                
+
                 {orders.length === 0 ? (
                   <div className="empty-orders">
                     <i className="bi bi-cart-x"></i>
@@ -128,6 +134,13 @@ const Profile = () => {
                             Jami: <strong>{order.total.toLocaleString()} so'm</strong>
                           </div>
                         </div>
+
+                        <button
+                          className="btn btn-danger mt-2"
+                          onClick={() => removeOrder(order.id)}
+                        >
+                          <i className="bi bi-trash"></i> Buyurtmani o'chirish
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -138,37 +151,40 @@ const Profile = () => {
             {activeTab === 'settings' && (
               <div className="settings-tab">
                 <h2><i className="bi bi-gear"></i> Shaxsiy ma'lumotlar</h2>
-                <form className="profile-form">
+                <form className="profile-form" onSubmit={(e) => e.preventDefault()}>
                   <div className="form-group">
                     <label>Ismingiz</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       placeholder={userData.name}
-                      onChange={(e) => setUserData({...userData, name: e.target.value})}
+                      value={userData.name}
+                      onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                     />
                   </div>
                   <div className="form-group">
                     <label>Telefon raqam</label>
-                    <input 
-                      type="tel" 
+                    <input
+                      type="tel"
                       placeholder={userData.phone}
-                      onChange={(e) => setUserData({...userData, phone: e.target.value}
-                      )}
+                      value={userData.phone}
+                      onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
                     />
                   </div>
                   <div className="form-group">
                     <label>Email manzil</label>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       placeholder={userData.email}
-                      onChange={(e) => setUserData({...userData, email: e.target.value})}
+                      value={userData.email}
+                      onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                     />
                   </div>
                   <div className="form-group">
                     <label>Asosiy manzil</label>
                     <textarea
                       placeholder={userData.address}
-                      onChange={(e) => setUserData({...userData, address: e.target.value})}
+                      value={userData.address}
+                      onChange={(e) => setUserData({ ...userData, address: e.target.value })}
                     />
                   </div>
                   <button type="submit" className="save-btn">

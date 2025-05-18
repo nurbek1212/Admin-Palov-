@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 
 type Product = {
   id: number;
@@ -21,10 +21,14 @@ type BasketContextType = {
 const BasketContext = createContext<BasketContextType | undefined>(undefined);
 const LOCAL_STORAGE_KEY = 'restaurant_basket';
 
-export const BasketProvider = ({ children }: { children: ReactNode }) => {
-  // LocalStorage'dan boshlang'ich qiymatlarni yuklash
+interface BasketProviderProps {
+  children: ReactNode;
+}
+
+export const BasketProvider: React.FC<BasketProviderProps> = ({ children }) => {
+  // Mahsulotlar holatini localStorage'dan yuklash
   const [products, setProducts] = useState<Product[]>(() => {
-    if (typeof window === 'undefined') return []; // SSR uchun
+    if (typeof window === 'undefined') return [];
     try {
       const savedBasket = localStorage.getItem(LOCAL_STORAGE_KEY);
       return savedBasket ? JSON.parse(savedBasket) : [];
@@ -34,7 +38,7 @@ export const BasketProvider = ({ children }: { children: ReactNode }) => {
     }
   });
 
-  // Savat o'zgarganida localStorage'ga yozish
+  // Savat o‘zgarganda localStorage'ga saqlash
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -45,21 +49,20 @@ export const BasketProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [products]);
 
+  // Mahsulot qo‘shish yoki miqdorini oshirish
   const addToBasket = (item: Product) => {
     setProducts((prev) => {
       const existing = prev.find((p) => p.id === item.id);
-      const updatedProducts = existing
-        ? prev.map((p) =>
-            p.id === item.id 
-              ? { ...p, quantity: p.quantity + item.quantity } 
-              : p
-          )
-        : [...prev, item];
-      
-      return updatedProducts;
+      if (existing) {
+        return prev.map((p) =>
+          p.id === item.id ? { ...p, quantity: p.quantity + item.quantity } : p
+        );
+      }
+      return [...prev, item];
     });
   };
 
+  // Savatni tozalash
   const clearBasket = () => {
     setProducts([]);
     if (typeof window !== 'undefined') {
@@ -67,39 +70,42 @@ export const BasketProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Miqdorni yangilash
   const updateQuantity = (id: number, quantity: number) => {
     if (quantity < 1) {
       removeFromBasket(id);
       return;
     }
-    setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, quantity } : p))
-    );
+    setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, quantity } : p)));
   };
 
+  // Mahsulotni olib tashlash
   const removeFromBasket = (id: number) => {
     setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
   // Jami mahsulotlar soni
-  const totalItems = products.reduce((sum, item) => sum + item.quantity, 0);
-  
+  const totalItems = useMemo(() => 
+    products.reduce((sum, item) => sum + item.quantity, 0), 
+    [products]
+  );
+
   // Jami summa
-  const totalAmount = products.reduce(
-    (sum, item) => sum + item.price * item.quantity, 
-    0
+  const totalAmount = useMemo(() =>
+    products.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [products]
   );
 
   return (
-    <BasketContext.Provider 
-      value={{ 
-        products, 
-        addToBasket, 
-        clearBasket, 
-        updateQuantity, 
+    <BasketContext.Provider
+      value={{
+        products,
+        addToBasket,
+        clearBasket,
+        updateQuantity,
         removeFromBasket,
         totalItems,
-        totalAmount
+        totalAmount,
       }}
     >
       {children}
@@ -109,6 +115,19 @@ export const BasketProvider = ({ children }: { children: ReactNode }) => {
 
 export const useBasket = () => {
   const context = useContext(BasketContext);
-  if (!context) throw new Error("useBasket must be used within BasketProvider");
+  if (!context) throw new Error('useBasket must be used within BasketProvider');
   return context;
 };
+
+// Misol: Savat summasi va tozalash tugmasi
+export function BasketSummary() {
+  const { totalItems, totalAmount, clearBasket } = useBasket();
+
+  return (
+    <div>
+      <p>Mahsulotlar soni: {totalItems}</p>
+      <p>Jami summa: {totalAmount} so'm</p>
+      <button onClick={clearBasket}>Savatni tozalash</button>
+    </div>
+  );
+}
