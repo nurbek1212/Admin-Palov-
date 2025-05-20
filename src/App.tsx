@@ -7,9 +7,11 @@ import Support from './pages/Support';
 import Basket from './pages/Basket';
 import { BasketProvider } from './context/BasketContext';
 import Profile from './components/Profile';
-import ContactForm from './context/CantactForm';
+import ContactForm from './pages/CantactForm';
+import Wrapper from './pages/AuthWrapper';
 
 const App = () => {
+  
   return (
     <BasketProvider>
       <Router>
@@ -22,9 +24,10 @@ const App = () => {
           <Route path="/support" element={<Support />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/cantactform" element={<ContactForm />} />
+          <Route path="/authwrapper" element={<Wrapper />} />
         </Routes>
       </Router>
-    </BasketProvider>
+    </BasketProvider>   
   );
 };
 

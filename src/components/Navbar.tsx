@@ -23,7 +23,7 @@ const Header = () => {
               <NavLink className="nav-link text-white" to="/"><i className="fa-solid fa-house fa-beat-fade pe-1 "></i>Bosh sahifa</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link text-white" to="/menu"><i className="fa-solid fa-utensils fa-spin fa-spin-reverse pe-1"></i>Menyu</NavLink>
+              <NavLink className="nav-link text-white" to="/menu"><i className="fa-solid fa-utensils fa-beat-fade pe-1"></i>Menyu</NavLink>
             </li>
             <li className="nav-item">
               <NavLink className="nav-link text-white" to="/Basket"><i className="fa-solid fa-basket-shopping fa-bounce pe-1"></i>Savat</NavLink>
@@ -32,7 +32,10 @@ const Header = () => {
               <NavLink className="nav-link text-white" to="/Support"><i className="fa-solid fa-phone fa-shake pe-1"></i>Bog‘lanish</NavLink>
             </li>
             <li className="nav-item pb-2">
-              <NavLink className="nav-link text-white" to="/Profile"><i className="fa-solid fa-user fa-flip pe-1"></i>Profil</NavLink>
+              <NavLink className="nav-link text-white" to="/Profile"><i className="fa-solid fa-user fa-beat pe-1"></i>Profil</NavLink>
+            </li>
+            <li className="nav-item pb-2">
+              <NavLink className="nav-link text-white" to="/authwrapper"><i className="fa-solid fa-user fa-beat pe-1"></i>Royhatdan otish / Kirish</NavLink>
             </li>
             <li className="nav-item">
               <NavLink className="btn btn-warning ms-3 " to="/Order">Buyurtma berish</NavLink>

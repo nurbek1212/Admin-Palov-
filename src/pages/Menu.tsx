@@ -14,7 +14,7 @@ const Menu = () => {
       price: 35000,
       image: "https://arbuz.com/wp-content/uploads/2009/12/Uzbek-Palov.jpg"
     },
-    {
+    { 
       id: 2,
       name: "Mastava",
       description: "Sho'rva, qo'y go'shti, sabzavotlar bilan",
@@ -59,9 +59,9 @@ const Menu = () => {
   };
 
   return (
-    <div className='menu-section'>
+    <div className='menu-section pt-5'>
       <Container>
-        <h1 className="text-white mb-4 text-center">Menyu</h1>
+        <h1 className="text-white mb-4 text-center pt-5">Menyu</h1>
         <Row xs={1} md={2} lg={3} className="g-4">
           {menuItems.map((item) => (
             <Col key={item.id}>

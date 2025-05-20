@@ -386,23 +386,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
 /* Basket */
-
-
-
-
-
-
-
 
 
 
@@ -1026,7 +1010,9 @@
   font-size: 0.95rem;
   font-weight: 500;
 }
-
+.form-group label i {
+  padding-top: 40px;
+}
 .form-control {
   width: 100%;
   padding: 0.9rem 1rem;
@@ -1941,4 +1927,157 @@ select.form-control {
 .add-address-btn:hover {
   background: rgba(255, 255, 255, 0.05);
   color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Auth Wrapper */
+
+
+
+/* AuthWrapper.css */
+
+/* Base styles */
+.auth-wrapper {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Background gradient animation */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.auth-background {
+  background: linear-gradient(135deg, #1e3a8a, #6b21a8, #1e40af);
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Card styles */
+.auth-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.auth-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+}
+
+/* Input field styles */
+.auth-input {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.auth-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.auth-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Button styles */
+.auth-button {
+  transition: all 0.3s ease;
+  transform: translateY(0);
+}
+
+.auth-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+.auth-button:active {
+  transform: translateY(0);
+}
+
+/* Tab button styles */
+.auth-tab-button {
+  transition: all 0.3s ease;
+}
+
+.auth-tab-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Error message styles */
+.auth-error {
+  background-color: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.auth-loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Password toggle button */
+.auth-password-toggle {
+  transition: all 0.2s ease;
+}
+
+.auth-password-toggle:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Link styles */
+.auth-link {
+  transition: color 0.2s ease;
+}
+
+.auth-link:hover {
+  color: rgba(147, 197, 253, 1);
 }
