@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { FaUser, FaPhone, FaEnvelope, FaLock, FaSignInAlt, FaUserPlus, FaEye, FaEyeSlash } from 'react-icons/fa';
-import "./AuthWrapper.css"
 
 type AuthWrapperProps = {
   children?: React.ReactNode;
