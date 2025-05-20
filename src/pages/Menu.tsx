@@ -12,7 +12,7 @@ const Menu = () => {
       name: "Palov",
       description: "An'anaviy O'zbek palovi, qo'y go'shti bilan",
       price: 35000,
-      image: "https://arbuz.com/wp-content/uploads/2009/12/Uzbek-Palov.jpg"
+      image: "https://www.orexca.com/img/cuisine/plov/uzbek-pilaf.jpg"
     },
     { 
       id: 2,
