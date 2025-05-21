@@ -1949,11 +1949,16 @@ select.form-control {
 
 
 
+
+
+
+
 /* AuthWrapper.css */
 
 /* Base styles */
 .auth-wrapper {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
 }
 
 /* Background gradient animation */
@@ -1970,72 +1975,98 @@ select.form-control {
 }
 
 .auth-background {
-  background: linear-gradient(135deg, #1e3a8a, #6b21a8, #1e40af);
-  background-size: 200% 200%;
+  background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #533483);
+  background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
 }
 
 /* Card styles */
 .auth-card {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 
-              0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   transition: all 0.3s ease;
+  padding: 2rem;
 }
 
 .auth-card:hover {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.57);
+  transform: translateY(-5px);
 }
 
 /* Input field styles */
 .auth-input {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  border-radius: 8px !important;
   transition: all 0.3s ease;
-}
-
-.auth-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  padding: 10px 15px !important;
 }
 
 .auth-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-  background-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25) !important;
+}
+
+.auth-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.input-group-text {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* Button styles */
 .auth-button {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   transition: all 0.3s ease;
-  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .auth-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #5a6fd8, #6a3fa0);
 }
 
 .auth-button:active {
-  transform: translateY(0);
+  transform: translateY(1px);
 }
 
 /* Tab button styles */
 .auth-tab-button {
-  transition: all 0.3s ease;
+  border-radius: 8px !important;
+  padding: 8px 20px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
 }
 
-.auth-tab-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.btn-outline-light {
+  color: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
 }
 
 /* Error message styles */
 .auth-error {
-  background-color: rgba(239, 68, 68, 0.2);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(220, 53, 69, 0.2) !important;
+  border: 1px solid rgba(220, 53, 69, 0.3) !important;
+  border-radius: 8px !important;
   animation: fadeIn 0.3s ease;
 }
 
@@ -2053,7 +2084,7 @@ select.form-control {
 /* Loading animation */
 @keyframes pulse {
   0%, 100% {
-    opacity: 0.5;
+    opacity: 0.6;
   }
   50% {
     opacity: 1;
@@ -2066,18 +2097,48 @@ select.form-control {
 
 /* Password toggle button */
 .auth-password-toggle {
-  transition: all 0.2s ease;
+  border-radius: 0 8px 8px 0 !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  transition: all 0.2s ease !important;
 }
 
 .auth-password-toggle:hover {
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
 }
 
 /* Link styles */
 .auth-link {
-  transition: color 0.2s ease;
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  font-weight: 500;
 }
 
 .auth-link:hover {
-  color: rgba(147, 197, 253, 1);
+  color: #a5b4fc !important;
+  text-decoration: underline !important;
+}
+
+/* Additional spacing */
+.mb-3 {
+  margin-bottom: 1.2rem !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .auth-card {
+    padding: 1.5rem;
+    margin: 0 15px;
+  }
+  
+  .auth-button {
+    padding: 10px;
+  }
 }

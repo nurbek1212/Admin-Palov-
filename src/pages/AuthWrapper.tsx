@@ -1,5 +1,16 @@
 import { useState } from 'react';
-import { FaUser, FaPhone, FaEnvelope, FaLock, FaSignInAlt, FaUserPlus, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
+import {
+  FaUser,
+  FaPhone,
+  FaEnvelope,
+  FaLock,
+  FaSignInAlt,
+  FaUserPlus,
+  FaEye,
+  FaEyeSlash
+} from 'react-icons/fa';
 
 type AuthWrapperProps = {
   children?: React.ReactNode;
@@ -24,21 +35,33 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
+  
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       if (!formData.phone || !formData.password) {
         throw new Error('Telefon raqam va parol kiritilishi shart');
       }
+
+      // Foydalanuvchi ma'lumotlarini localStorage ga saqlash
+      const userData = {
+        phone: formData.phone,
+        name: '', // Login holatida name bo'lmaydi
+        email: '', // Login holatida email bo'lmaydi
+        address: ''
+      };
       
       setIsAuthenticated(true);
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userData', JSON.stringify(userData));
+
+      navigate('/profile');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Xatolik yuz berdi');
     } finally {
@@ -50,16 +73,27 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       if (!formData.name || !formData.phone || !formData.password) {
         throw new Error('Ism, telefon raqam va parol kiritilishi shart');
       }
+
+      // Foydalanuvchi ma'lumotlarini localStorage ga saqlash
+      const userData = {
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email || '', // Email ixtiyoriy
+        address: ''
+      };
       
       setIsAuthenticated(true);
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userData', JSON.stringify(userData));
+
+      navigate('/profile');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Xatolik yuz berdi');
     } finally {
@@ -81,223 +115,136 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900 p-4">
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl overflow-hidden border border-white/20">
-        <div className="p-8">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">
-              {activeTab === 'login' ? 'Kabinetga kirish' : 'Ro\'yxatdan o\'tish'}
-            </h1>
-            <div className="flex justify-center space-x-4 mb-6">
+    <div className="auth-wrapper auth-background d-flex align-items-center justify-content-center min-vh-100">
+      <div className="auth-card p-4 w-100" style={{ maxWidth: '450px' }}>
+        <h2 className="text-white text-center mb-4">
+          {activeTab === 'login' ? 'Kabinetga kirish' : 'Ro‘yxatdan o‘tish'}
+        </h2>
+
+        <div className="d-flex justify-content-center mb-4">
+          <button
+            className={`btn me-2 auth-tab-button ${activeTab === 'login' ? 'btn-light' : 'btn-outline-light'}`}
+            onClick={() => setActiveTab('login')}
+          >
+            Kirish
+          </button>
+          <button
+            className={`btn auth-tab-button ${activeTab === 'register' ? 'btn-light' : 'btn-outline-light'}`}
+            onClick={() => setActiveTab('register')}
+          >
+            Ro'yxatdan o'tish
+          </button>
+        </div>
+
+        {error && <div className="auth-error text-white p-2 mb-3 rounded">{error}</div>}
+
+        <form onSubmit={activeTab === 'login' ? handleLogin : handleRegister}>
+          {activeTab === 'register' && (
+            <div className="mb-3">
+              <div className="input-group">
+                <span className="input-group-text"><FaUser /></span>
+                <input
+                  type="text"
+                  name="name"
+                  className="form-control auth-input"
+                  placeholder="Ismingiz"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="mb-3">
+            <div className="input-group">
+              <span className="input-group-text"><FaPhone /></span>
+              <input
+                type="tel"
+                name="phone"
+                className="form-control auth-input"
+                placeholder="+998 90 123 45 67"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          </div>
+
+          {activeTab === 'register' && (
+            <div className="mb-3">
+              <div className="input-group">
+                <span className="input-group-text"><FaEnvelope /></span>
+                <input
+                  type="email"
+                  name="email"
+                  className="form-control auth-input"
+                  placeholder="email@example.uz"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="mb-3">
+            <div className="input-group">
+              <span className="input-group-text"><FaLock /></span>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                className="form-control auth-input"
+                placeholder={activeTab === 'register' ? 'Parol yarating' : 'Parolingiz'}
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+              />
               <button
-                className={`px-6 py-2 rounded-full transition-all duration-300 ${
-                  activeTab === 'login' 
-                    ? 'bg-blue-500 text-white shadow-lg' 
-                    : 'bg-white/10 text-white hover:bg-white/20'
-                }`}
-                onClick={() => setActiveTab('login')}
+                type="button"
+                className="btn btn-outline-light auth-password-toggle"
+                onClick={togglePasswordVisibility}
               >
-                Kirish
-              </button>
-              <button
-                className={`px-6 py-2 rounded-full transition-all duration-300 ${
-                  activeTab === 'register' 
-                    ? 'bg-blue-500 text-white shadow-lg' 
-                    : 'bg-white/10 text-white hover:bg-white/20'
-                }`}
-                onClick={() => setActiveTab('register')}
-              >
-                Ro'yxatdan o'tish
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-3 bg-red-500/20 text-red-100 rounded-lg text-sm border border-red-500/30">
-              {error}
-            </div>
-          )}
+          <button
+            type="submit"
+            className="btn btn-light w-100 auth-button d-flex align-items-center justify-content-center gap-2"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="spinner-border spinner-border-sm auth-loading" role="status" aria-hidden="true" />
+            ) : activeTab === 'login' ? (
+              <><FaSignInAlt /> Kirish</>
+            ) : (
+              <><FaUserPlus /> Ro'yxatdan o'tish</>
+            )}
+          </button>
+        </form>
 
-          {/* Forms */}
+        <div className="text-center mt-3">
           {activeTab === 'login' ? (
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-white/80 text-sm font-medium">Telefon raqam</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaPhone className="text-white/60" />
-                  </div>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="+998 90 123 45 67"
-                    required
-                    className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-white/80 text-sm font-medium">Parol</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaLock className="text-white/60" />
-                  </div>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    placeholder="Parolingizni kiriting"
-                    required
-                    className="w-full pl-10 pr-10 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-white/60 hover:text-white/80"
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-              </div>
-
+            <>
+              Akkauntingiz yo‘qmi?{' '}
               <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full flex items-center justify-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn btn-link text-white auth-link p-0"
+                onClick={() => setActiveTab('register')}
               >
-                {isLoading ? (
-                  <span className="animate-pulse">Yuklanmoqda...</span>
-                ) : (
-                  <>
-                    <FaSignInAlt />
-                    <span>Kirish</span>
-                  </>
-                )}
+                Ro'yxatdan o'tish
               </button>
-
-              <div className="text-center text-white/70 text-sm mt-4">
-                Akkauntingiz yo'qmi?{' '}
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('register')}
-                  className="text-blue-300 hover:text-blue-200 underline underline-offset-2 transition-colors"
-                >
-                  Ro'yxatdan o'tish
-                </button>
-              </div>
-            </form>
+            </>
           ) : (
-            <form onSubmit={handleRegister} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-white/80 text-sm font-medium">Ismingiz</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaUser className="text-white/60" />
-                  </div>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="Ismingizni kiriting"
-                    required
-                    className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-white/80 text-sm font-medium">Telefon raqam</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaPhone className="text-white/60" />
-                  </div>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="+998 90 123 45 67"
-                    required
-                    className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-white/80 text-sm font-medium">Email (ixtiyoriy)</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaEnvelope className="text-white/60" />
-                  </div>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="email@example.uz"
-                    className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-white/80 text-sm font-medium">Parol</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaLock className="text-white/60" />
-                  </div>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    placeholder="Parol yarating"
-                    required
-                    className="w-full pl-10 pr-10 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-white/60 hover:text-white/80"
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-              </div>
-
+            <>
+              Akkauntingiz bormi?{' '}
               <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full flex items-center justify-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn btn-link text-white auth-link p-0"
+                onClick={() => setActiveTab('login')}
               >
-                {isLoading ? (
-                  <span className="animate-pulse">Yuklanmoqda...</span>
-                ) : (
-                  <>
-                    <FaUserPlus />
-                    <span>Ro'yxatdan o'tish</span>
-                  </>
-                )}
+                Kirish
               </button>
-
-              <div className="text-center text-white/70 text-sm mt-4">
-                Akkauntingiz bormi?{' '}
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('login')}
-                  className="text-blue-300 hover:text-blue-200 underline underline-offset-2 transition-colors"
-                >
-                  Kirish
-                </button>
-              </div>
-            </form>
+            </>
           )}
         </div>
       </div>

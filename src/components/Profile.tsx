@@ -1,13 +1,38 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
-    name: 'Foydalanuvchi Ismi',
-    phone: '+998 90 123 45 67',
-    email: 'user@example.uz',
-    address: 'Xorazm Viloyati, Xiva tumani'
+    name: '',
+    phone: '',
+    email: '',
+    address: ''
   });
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem('userData');
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    
+    if (isAuthenticated && storedUserData) {
+      setUserData(JSON.parse(storedUserData));
+    } else {
+      // Agar ma'lumotlar topilmasa, foydalanuvchini auth sahifasiga yo'naltirish
+      navigate('/authwrapper');
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userData');
+    navigate('/');
+  };
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem('userData', JSON.stringify(userData));
+    alert('Ma\'lumotlar saqlandi!');
+  };
 
   const [orders, setOrders] = useState([
     {
@@ -46,6 +71,9 @@ const Profile = () => {
       <div className="profile-container pt-5">
         <div className="profile-header">
           <h1><i className="bi bi-person-circle"></i> Shaxsiy Kabinet</h1>
+          <button onClick={handleLogout} className="btn btn-danger">
+            <i className="bi bi-box-arrow-right"></i> Chiqish
+          </button>
         </div>
 
         <div className="profile-content">
@@ -54,24 +82,24 @@ const Profile = () => {
               <div className="user-avatar">
                 <i className="bi bi-person"></i>
               </div>
-              <h3>{userData.name}</h3>
-              <p><i className="bi bi-telephone"></i> {userData.phone}</p>
-              <p><i className="bi bi-envelope"></i> {userData.email}</p>
-              <p><i className="bi bi-geo-alt"></i> {userData.address}</p>
+              <h3>{userData.name || 'Foydalanuvchi'}</h3>
+              <p><i className="bi bi-telephone"></i> {userData.phone || 'Telefon raqam kiritilmagan'}</p>
+              <p><i className="bi bi-envelope"></i> {userData.email || 'Email kiritilmagan'}</p>
+              <p><i className="bi bi-geo-alt"></i> {userData.address || 'Manzil kiritilmagan'}</p>
             </div>
 
             <nav className="profile-menu">
-              <button
-                className={activeTab === 'orders' ? 'active' : ''}
-                onClick={() => setActiveTab('orders')}
-              >
-                <i className="bi bi-cart4"></i> Buyurtmalar tarixi
-              </button>
               <button
                 className={activeTab === 'settings' ? 'active' : ''}
                 onClick={() => setActiveTab('settings')}
               >
                 <i className="bi bi-gear"></i> Sozlamalar
+              </button>
+              <button
+                className={activeTab === 'orders' ? 'active' : ''}
+                onClick={() => setActiveTab('orders')}
+              >
+                <i className="bi bi-cart4"></i> Buyurtmalar tarixi
               </button>
               <button
                 className={activeTab === 'addresses' ? 'active' : ''}
@@ -151,30 +179,32 @@ const Profile = () => {
             {activeTab === 'settings' && (
               <div className="settings-tab">
                 <h2><i className="bi bi-gear"></i> Shaxsiy ma'lumotlar</h2>
-                <form className="profile-form" onSubmit={(e) => e.preventDefault()}>
+                <form className="profile-form" onSubmit={handleSaveProfile}>
                   <div className="form-group">
                     <label>Ismingiz</label>
                     <input
                       type="text"
-                      placeholder={userData.name}
+                      placeholder="Ismingizni kiriting"
                       value={userData.name}
                       onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                      required
                     />
                   </div>
                   <div className="form-group">
                     <label>Telefon raqam</label>
                     <input
                       type="tel"
-                      placeholder={userData.phone}
+                      placeholder="+998 90 123 45 67"
                       value={userData.phone}
                       onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
+                      required
                     />
                   </div>
                   <div className="form-group">
                     <label>Email manzil</label>
                     <input
                       type="email"
-                      placeholder={userData.email}
+                      placeholder="email@example.uz"
                       value={userData.email}
                       onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                     />
@@ -182,7 +212,7 @@ const Profile = () => {
                   <div className="form-group">
                     <label>Asosiy manzil</label>
                     <textarea
-                      placeholder={userData.address}
+                      placeholder="Manzilingizni kiriting"
                       value={userData.address}
                       onChange={(e) => setUserData({ ...userData, address: e.target.value })}
                     />
@@ -201,7 +231,7 @@ const Profile = () => {
                   <div className="address-card">
                     <div className="address-content">
                       <h3>Asosiy manzil</h3>
-                      <p>{userData.address}</p>
+                      <p>{userData.address || 'Manzil kiritilmagan'}</p>
                     </div>
                     <div className="address-actions">
                       <button className="edit-btn">
