@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import {
   FaUser,
   FaPhone,
@@ -11,6 +10,8 @@ import {
   FaEye,
   FaEyeSlash
 } from 'react-icons/fa';
+import { login, register, LoginData, RegisterData } from '../api/auth';
+import './authwrapper.css';
 
 type AuthWrapperProps = {
   children?: React.ReactNode;
@@ -21,47 +22,50 @@ type FormData = {
   password: string;
   name: string;
   email: string;
+  confirmPassword: string;
 };
 
 const AuthWrapper = ({ children }: AuthWrapperProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
   const [formData, setFormData] = useState<FormData>({
     phone: '',
     password: '',
     name: '',
-    email: ''
+    email: '',
+    confirmPassword: ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-  
+  const [errors, setErrors] = useState({
+    phone: '',
+    password: '',
+    confirmPassword: ''
+  });
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
       if (!formData.phone || !formData.password) {
         throw new Error('Telefon raqam va parol kiritilishi shart');
       }
 
-      // Foydalanuvchi ma'lumotlarini localStorage ga saqlash
-      const userData = {
+      const loginData: LoginData = {
         phone: formData.phone,
-        name: '', // Login holatida name bo'lmaydi
-        email: '', // Login holatida email bo'lmaydi
-        address: ''
+        password: formData.password
       };
-      
-      setIsAuthenticated(true);
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('userData', JSON.stringify(userData));
 
-      navigate('/profile');
+      const response = await login(loginData);
+      
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('userData', JSON.stringify(response.user));
+      localStorage.setItem('isAuthenticated', 'true');
+      
+      window.location.href = '/profile';
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Xatolik yuz berdi');
     } finally {
@@ -75,25 +79,24 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     setError(null);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
       if (!formData.name || !formData.phone || !formData.password) {
         throw new Error('Ism, telefon raqam va parol kiritilishi shart');
       }
 
-      // Foydalanuvchi ma'lumotlarini localStorage ga saqlash
-      const userData = {
+      const registerData: RegisterData = {
         name: formData.name,
         phone: formData.phone,
-        email: formData.email || '', // Email ixtiyoriy
-        address: ''
+        email: formData.email || undefined,
+        password: formData.password
       };
-      
-      setIsAuthenticated(true);
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('userData', JSON.stringify(userData));
 
-      navigate('/profile');
+      const response = await register(registerData);
+      
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('userData', JSON.stringify(response.user));
+      localStorage.setItem('isAuthenticated', 'true');
+      
+      window.location.href = '/profile';
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Xatolik yuz berdi');
     } finally {
@@ -110,43 +113,100 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     setShowPassword(!showPassword);
   };
 
-  if (isAuthenticated || localStorage.getItem('isAuthenticated')) {
-    return <>{children}</>;
-  }
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {
+      phone: '',
+      password: '',
+      confirmPassword: ''
+    };
+
+    if (!formData.phone) {
+      newErrors.phone = 'Telefon raqamni kiriting';
+      isValid = false;
+    } else if (!/^\+998[0-9]{9}$/.test(formData.phone)) {
+      newErrors.phone = 'Telefon raqam noto\'g\'ri formatda';
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Parolni kiriting';
+      isValid = false;
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Parol kamida 6 ta belgidan iborat bo\'lishi kerak';
+      isValid = false;
+    }
+
+    if (activeTab === 'register' && formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Parollar mos kelmadi';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      if (activeTab === 'register') {
+        await register(formData.phone, formData.password);
+      } else {
+        await login(formData.phone, formData.password);
+      }
+      navigate('/');
+    } catch (error: any) {
+      setError(error.message);
+      
+      // Backend xatoliklarini input xatoliklariga aylantirish
+      if (error.message.includes('telefon raqam')) {
+        setErrors(prev => ({ ...prev, phone: error.message }));
+      } else if (error.message.includes('parol')) {
+        setErrors(prev => ({ ...prev, password: error.message }));
+      }
+    }
+  };
 
   return (
-    <div className="auth-wrapper auth-background d-flex align-items-center justify-content-center min-vh-100">
-      <div className="auth-card p-4 w-100" style={{ maxWidth: '450px' }}>
-        <h2 className="text-white text-center mb-4">
-          {activeTab === 'login' ? 'Kabinetga kirish' : 'Ro‘yxatdan o‘tish'}
-        </h2>
+    <div className="auth-page mt-4">
+      <div className="auth-container">
+        <div className="auth-header">
+          <h2>
+            {activeTab === 'login' ? 'Kabinetga kirish' : 'Ro\'yxatdan o\'tish'}
+          </h2>
+        </div>
 
-        <div className="d-flex justify-content-center mb-4">
+        <div className="tab-buttons">
           <button
-            className={`btn me-2 auth-tab-button ${activeTab === 'login' ? 'btn-light' : 'btn-outline-light'}`}
+            className={`tab-button ${activeTab === 'login' ? 'active' : ''}`}
             onClick={() => setActiveTab('login')}
           >
             Kirish
           </button>
           <button
-            className={`btn auth-tab-button ${activeTab === 'register' ? 'btn-light' : 'btn-outline-light'}`}
+            className={`tab-button ${activeTab === 'register' ? 'active' : ''}`}
             onClick={() => setActiveTab('register')}
           >
             Ro'yxatdan o'tish
           </button>
         </div>
 
-        {error && <div className="auth-error text-white p-2 mb-3 rounded">{error}</div>}
+        {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={activeTab === 'login' ? handleLogin : handleRegister}>
           {activeTab === 'register' && (
-            <div className="mb-3">
+            <div className="form-group">
               <div className="input-group">
-                <span className="input-group-text"><FaUser /></span>
+                <FaUser className="input-icon" />
                 <input
                   type="text"
                   name="name"
-                  className="form-control auth-input"
+                  className="form-input"
                   placeholder="Ismingiz"
                   value={formData.name}
                   onChange={handleInputChange}
@@ -156,29 +216,33 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
             </div>
           )}
 
-          <div className="mb-3">
+          <div className="form-group">
             <div className="input-group">
-              <span className="input-group-text"><FaPhone /></span>
+              <FaPhone className="input-icon" />
               <input
                 type="tel"
                 name="phone"
-                className="form-control auth-input"
+                className={`form-input ${errors.phone ? 'error' : ''}`}
                 placeholder="+998 90 123 45 67"
                 value={formData.phone}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  setFormData({ ...formData, phone: e.target.value });
+                  setErrors(prev => ({ ...prev, phone: '' }));
+                }}
                 required
               />
             </div>
+            {errors.phone && <span className="input-error">{errors.phone}</span>}
           </div>
 
           {activeTab === 'register' && (
-            <div className="mb-3">
+            <div className="form-group">
               <div className="input-group">
-                <span className="input-group-text"><FaEnvelope /></span>
+                <FaEnvelope className="input-icon" />
                 <input
                   type="email"
                   name="email"
-                  className="form-control auth-input"
+                  className="form-input"
                   placeholder="email@example.uz"
                   value={formData.email}
                   onChange={handleInputChange}
@@ -187,35 +251,66 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
             </div>
           )}
 
-          <div className="mb-3">
+          <div className="form-group">
             <div className="input-group">
-              <span className="input-group-text"><FaLock /></span>
+              <FaLock className="input-icon" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 name="password"
-                className="form-control auth-input"
+                className={`form-input ${errors.password ? 'error' : ''}`}
                 placeholder={activeTab === 'register' ? 'Parol yarating' : 'Parolingiz'}
                 value={formData.password}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  setFormData({ ...formData, password: e.target.value });
+                  setErrors(prev => ({ ...prev, password: '' }));
+                }}
                 required
               />
               <button
                 type="button"
-                className="btn btn-outline-light auth-password-toggle"
+                className="password-toggle"
                 onClick={togglePasswordVisibility}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
+            {errors.password && <span className="input-error">{errors.password}</span>}
           </div>
+
+          {activeTab === 'register' && (
+            <div className="form-group">
+              <div className="input-group">
+                <FaLock className="input-icon" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="confirmPassword"
+                  className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
+                  placeholder="Parolni tasdiqlang"
+                  value={formData.confirmPassword}
+                  onChange={(e) => {
+                    setFormData({ ...formData, confirmPassword: e.target.value });
+                    setErrors(prev => ({ ...prev, confirmPassword: '' }));
+                  }}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              {errors.confirmPassword && <span className="input-error">{errors.confirmPassword}</span>}
+            </div>
+          )}
 
           <button
             type="submit"
-            className="btn btn-light w-100 auth-button d-flex align-items-center justify-content-center gap-2"
+            className="submit-button"
             disabled={isLoading}
           >
             {isLoading ? (
-              <span className="spinner-border spinner-border-sm auth-loading" role="status" aria-hidden="true" />
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
             ) : activeTab === 'login' ? (
               <><FaSignInAlt /> Kirish</>
             ) : (
@@ -224,27 +319,27 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
           </button>
         </form>
 
-        <div className="text-center mt-3">
+        <div className="switch-text">
           {activeTab === 'login' ? (
-            <>
-              Akkauntingiz yo‘qmi?{' '}
-              <button
-                className="btn btn-link text-white auth-link p-0"
+            <span>
+              Akkauntingiz yo'qmi?{' '}
+              <div
+                className="switch-link d-inline-block"
                 onClick={() => setActiveTab('register')}
               >
                 Ro'yxatdan o'tish
-              </button>
-            </>
+              </div>
+            </span>
           ) : (
-            <>
+            <span>
               Akkauntingiz bormi?{' '}
-              <button
-                className="btn btn-link text-white auth-link p-0"
+              <div
+                className="switch-link d-inline-block"
                 onClick={() => setActiveTab('login')}
               >
                 Kirish
-              </button>
-            </>
+              </div>
+            </span>
           )}
         </div>
       </div>

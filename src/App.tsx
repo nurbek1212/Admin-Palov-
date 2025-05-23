@@ -9,10 +9,10 @@ import { BasketProvider } from './context/BasketContext';
 import Profile from './components/Profile';
 import ContactForm from './pages/ContactForm';
 import AuthWrapper from './pages/AuthWrapper';
+import Login from './components/Login';
+import Register from './components/Register';
 
 const App = () => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-
   return (
     <BasketProvider>
       <Router>
@@ -29,7 +29,9 @@ const App = () => {
           <Route 
             path="/authwrapper" 
             element={
-              isAuthenticated ? <Navigate to="/profile" /> : <AuthWrapper />
+              localStorage.getItem('isAuthenticated') === 'true' 
+                ? <Navigate to="/profile" replace /> 
+                : <AuthWrapper />
             } 
           />
           
@@ -37,13 +39,15 @@ const App = () => {
           <Route
             path="/profile"
             element={
-              isAuthenticated ? (
-                <Profile />
-              ) : (
-                <Navigate to="/authwrapper" />
-              )
+              localStorage.getItem('isAuthenticated') === 'true' 
+                ? <Profile />
+                : <Navigate to="/authwrapper" replace />
             }
           />
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
     </BasketProvider>

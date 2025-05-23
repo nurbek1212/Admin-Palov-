@@ -1,80 +1,125 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import "./Profile.css"
+import api from '../services/api';
+
+interface UserData {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+}
+
+interface OrderItem {
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+interface Order {
+  id: string;
+  date: string;
+  items: OrderItem[];
+  total: number;
+  status: string;
+  payment: string;
+}
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<UserData>({
     name: '',
     phone: '',
     email: '',
     address: ''
   });
-
-  useEffect(() => {
-    const storedUserData = localStorage.getItem('userData');
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
-    
-    if (isAuthenticated && storedUserData) {
-      setUserData(JSON.parse(storedUserData));
-    } else {
-      // Agar ma'lumotlar topilmasa, foydalanuvchini auth sahifasiga yo'naltirish
-      navigate('/authwrapper');
-    }
-  }, [navigate]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('userData');
-    navigate('/');
-  };
-
-  const handleSaveProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    localStorage.setItem('userData', JSON.stringify(userData));
-    alert('Ma\'lumotlar saqlandi!');
-  };
-
-  const [orders, setOrders] = useState([
-    {
-      id: '#12345',
-      date: '2023-10-15',
-      items: [
-        { name: 'Osh', price: 25000, quantity: 2 },
-        { name: 'Salat', price: 15000, quantity: 1 }
-      ],
-      total: 65000,
-      status: 'Yetkazib berildi',
-      payment: 'Naqd pul'
-    },
-    {
-      id: '#12344',
-      date: '2023-10-10',
-      items: [
-        { name: 'Lag\'mon', price: 28000, quantity: 1 },
-        { name: 'Choy', price: 5000, quantity: 2 }
-      ],
-      total: 38000,
-      status: 'Bekor qilindi',
-      payment: 'Karta orqali'
-    }
-  ]);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [activeTab, setActiveTab] = useState('orders');
 
-  // Buyurtmani o'chirish funksiyasi
-  const removeOrder = (id: string) => {
-    setOrders((prev) => prev.filter(order => order.id !== id));
+  // Autentifikatsiyani tekshirish
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/authwrapper');
+          return;
+        }
+
+        const response = await api.get<UserData>('/auth/profile');
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Error checking auth:', error);
+        navigate('/authwrapper');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [navigate]);
+
+  // Buyurtmalarni olish
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (activeTab === 'orders') {
+        try {
+          const response = await api.get<Order[]>('/orders');
+          setOrders(response.data);
+        } catch (error) {
+          console.error('Error fetching orders:', error);
+          setError('Buyurtmalarni yuklashda xatolik yuz berdi');
+        }
+      }
+    };
+
+    fetchOrders();
+  }, [activeTab]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userData');
+    navigate('/authwrapper');
   };
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      const response = await api.put<UserData>('/auth/profile', userData);
+      setUserData(response.data);
+      alert('Ma\'lumotlar saqlandi!');
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      setError('Ma\'lumotlarni saqlashda xatolik yuz berdi');
+    }
+  };
+
+  const removeOrder = async (id: string) => {
+    try {
+      await api.delete(`/orders/${id}`);
+      setOrders(orders.filter(order => order.id !== id));
+    } catch (error) {
+      console.error('Error removing order:', error);
+      setError('Buyurtmani o\'chirishda xatolik yuz berdi');
+    }
+  };
+
+  if (loading) {
+    return <div className="loading">Yuklanmoqda...</div>;
+  }
 
   return (
     <div className="profile-page pt-5">
       <div className="profile-container pt-5">
         <div className="profile-header">
           <h1><i className="bi bi-person-circle"></i> Shaxsiy Kabinet</h1>
-          <button onClick={handleLogout} className="btn btn-danger">
-            <i className="bi bi-box-arrow-right"></i> Chiqish
-          </button>
         </div>
+
+        {error && <div className="error-message">{error}</div>}
 
         <div className="profile-content">
           <div className="profile-sidebar">
@@ -110,6 +155,12 @@ const Profile = () => {
               <NavLink to="/support" className="support-link">
                 <i className="bi bi-headset"></i> Yordam
               </NavLink>
+              <button
+                className="profile-menu-btn"
+                onClick={handleLogout}
+              >
+                <i className="bi bi-box-arrow-right"></i> Chiqish
+              </button>
             </nav>
           </div>
 

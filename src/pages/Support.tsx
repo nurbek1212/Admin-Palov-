@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Support = () => {
-  const [formData, setFormData] = useState({
+import '../pages/suppor.css';
+
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+const Support: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     subject: '',
     message: ''
   });
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -20,6 +31,7 @@ const Support = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     setIsSubmitted(true);
+    // Reset form
     setFormData({
       name: '',
       email: '',
@@ -28,7 +40,6 @@ const Support = () => {
     });
   };
 
-  // isSubmitted o'zgarganda 3 soniya keyin xabarni o'chirish uchun useEffect
   useEffect(() => {
     if (isSubmitted) {
       const timer = setTimeout(() => setIsSubmitted(false), 3000);

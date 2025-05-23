@@ -2,7 +2,7 @@
   "name": "react-js-loyiha",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -10,12 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/react-router-dom": "^5.3.3",
+    "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^6.14.0"
+    "react-router-dom": "^7.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
@@ -23,13 +26,10 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
-    "autoprefixer": "^10.4.21",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.6",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"

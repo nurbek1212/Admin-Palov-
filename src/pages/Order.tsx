@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useBasket } from '../context/BasketContext';
 import { useNavigate } from 'react-router-dom';
+import '../pages/order.css';
 
 const Order = () => {
     const { products, clearBasket, updateQuantity, removeFromBasket } = useBasket();

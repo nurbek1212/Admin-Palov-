@@ -1,0 +1,478 @@
+/* Asosiy stil */
+.profile-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #140f3c, #302b63, #24243e);
+    padding: 2rem 0;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  
+  .profile-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #ffc107;
+  }
+  
+  .profile-header .bi {
+    font-size: 2.5rem;
+  }
+  
+  .profile-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-content {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Sidebar stil */
+  .profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .user-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .user-avatar {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 193, 7, 0.1);
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 193, 7, 0.3);
+  }
+  
+  .user-avatar .bi {
+    font-size: 3rem;
+    color: #ffc107;
+  }
+  
+  .user-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #ffc107;
+  }
+  
+  .user-card p {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+  }
+  
+  .user-card .bi {
+    color: #ffc107;
+  }
+  
+  .profile-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .profile-menu button,
+  .profile-menu .support-link,
+  .profile-menu .profile-menu-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+    width: 100%;
+  }
+  
+  .profile-menu button:hover,
+  .profile-menu .support-link:hover,
+  .profile-menu .profile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+  
+  .profile-menu button.active {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+  }
+  
+  .profile-menu .profile-menu-btn:hover {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+  }
+  
+  .profile-menu .bi {
+    font-size: 1.1rem;
+  }
+  
+  .support-link {
+    text-decoration: none;
+  }
+  
+  /* Asosiy kontent */
+  .profile-main {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .profile-main h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #ffc107;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  
+  /* Buyurtmalar tarixi */
+  .empty-orders {
+    text-align: center;
+    padding: 3rem 0;
+  }
+  
+  .empty-orders .bi {
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.2);
+    margin-bottom: 1.5rem;
+  }
+  
+  .empty-orders p {
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .order-btn {
+    background: #ffc107;
+    color: #1a1a1a;
+    padding: 0.7rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+  }
+  
+  .order-btn:hover {
+    background: #ffb700;
+    transform: translateY(-2px);
+  }
+  
+  .orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .order-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .order-header h3 {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  
+  .order-date {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+  }
+  
+  .order-status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .order-status.yetkazib-berildi {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+  }
+  
+  .order-status.bekor-qilindi {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+  }
+  
+  .order-items {
+    margin-bottom: 1.5rem;
+  }
+  
+  .order-items h4 {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .order-items ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .order-items li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  }
+  
+  .order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .payment-method {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .order-total {
+    font-size: 1.1rem;
+  }
+  
+  .order-total strong {
+    color: #ffc107;
+  }
+  
+  /* Sozlamalar formasi */
+  .profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form-group label {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    padding: 0.8rem 1rem;
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .save-btn, .logout-btn {
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+  }
+  
+  .save-btn {
+    background: #ffc107;
+    color: #1a1a1a;
+    border: none;
+  }
+  
+  .save-btn:hover {
+    background: #ffb700;
+    transform: translateY(-2px);
+  }
+  
+  .logout-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  
+  .logout-btn:hover {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+  }
+  
+  .logout-btn .bi {
+    font-size: 1.1rem;
+  }
+  
+  @media (max-width: 576px) {
+    .form-actions {
+      flex-direction: column;
+    }
+  }
+  
+  /* Manzillar */
+  .addresses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .address-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .address-content h3 {
+    color: #ffc107;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .address-content p {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+  }
+  
+  .address-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .edit-btn,
+  .delete-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .edit-btn {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+  }
+  
+  .delete-btn {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+  }
+  
+  .add-address-btn {
+    background: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+  }
+  
+  .add-address-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

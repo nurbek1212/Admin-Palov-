@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useBasket } from '../context/BasketContext';
+import '../pages/basket.css';
 
 const Basket = () => {
     const { products, clearBasket, updateQuantity, removeFromBasket } = useBasket();
@@ -14,7 +15,7 @@ const Basket = () => {
                     <i className="bi bi-cart-x"></i>
                     <h2>Savat bo'sh</h2>
                     <p>Hozircha savatingizda mahsulot yo'q</p>
-                    <NavLink to="/menu" className="back-btn">
+                    <NavLink to="/menu" className="back-to-menu-btn p-5 text-decoration-none">
                         <i className="bi bi-arrow-left"></i> Menyuga qaytish
                     </NavLink>
                 </div>

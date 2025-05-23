@@ -1,0 +1,356 @@
+/* Asosiy stil */
+.basket-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #140f3c, #302b63, #24243e);
+    padding: 2rem 0;
+    color: white;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Savat kartasi */
+  .basket-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Savat sarlavhasi */
+  .basket-header {
+    padding: 1.2rem 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .basket-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .basket-header .bi {
+    color: #ffc107;
+    font-size: 1.6rem;
+  }
+  
+  .badge {
+    background: #ffc107;
+    color: #1a1a1a;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-left: auto;
+  }
+  
+  /* Mahsulot kartalari */
+  .items-list {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.2rem;
+  }
+  
+  .product-card {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  
+  .product-info {
+    padding: 0.8rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+  }
+  
+  .product-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+  
+  .delete-btn {
+    background: transparent;
+    border: none;
+    color: #ff6b6b;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .delete-btn:hover {
+    color: #ff3b3b;
+    transform: scale(1.1);
+  }
+  
+  .product-controls {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.3rem;
+  }
+  
+  .quantity-selector button {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  
+  .quantity-selector button:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .quantity-selector button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .quantity-selector span {
+    min-width: 20px;
+    text-align: center;
+    font-weight: 500;
+  }
+  
+  .price-info p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .price-info h4 {
+    margin: 0.3rem 0 0;
+    color: #ffc107;
+    font-size: 1.1rem;
+  }
+  
+  /* Savat footer */
+  .basket-footer {
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .total-sum {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .total-sum h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .total-sum h2 {
+    margin: 0;
+    color: #ffc107;
+    font-size: 1.5rem;
+  }
+  
+  .action-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+  
+  .clear-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .clear-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .order-btn {
+    background: #ffc107;
+    color: #1a1a1a;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .order-btn:hover {
+    background: #ffb700;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Bo'sh savat */
+  .empty-basket {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #140f3c, #302b63, #24243e);
+    min-height: 100vh;
+  }
+  
+  .empty-content {
+    text-align: center;
+    max-width: 400px;
+    padding: 2rem;
+  }
+  
+  .empty-content .bi {
+    font-size: 4rem;
+    color: #ffc107;
+    animation: pulse 2s infinite;
+  }
+  
+  .empty-content h2 {
+    margin-bottom: 1rem;
+    color: white;
+  }
+  
+  .empty-content p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2rem;
+  }
+  
+  .back-btn {
+    background: #ffc107;
+    color: #1a1a1a;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .back-btn:hover {
+    background: #ffb700;
+    transform: translateY(-2px);
+  }
+  
+  /* Animatsiya */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+  
+    50% {
+      transform: scale(1.1);
+    }
+  
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  /* Mobil versiya */
+  @media (max-width: 768px) {
+    .items-list {
+      grid-template-columns: 1fr;
+    }
+  
+    .product-card {
+      flex-direction: column;
+    }
+  
+    .product-image {
+      width: 100%;
+      height: 150px;
+    }
+  
+    .action-btns {
+      flex-direction: column;
+    }
+  
+    .clear-btn,
+    .order-btn {
+      justify-content: center;
+    }
+  }
+  
+  
+  
+  
+  
+  /* Input elementlarini transparent qilish */
+input, textarea, select {
+  background-color: transparent !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 1rem;
+}
+
+/* Focus holatida stil */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #ffc107;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+}
+
+/* Placeholder rangi */
+input::placeholder, textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
